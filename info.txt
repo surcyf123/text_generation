@@ -1,0 +1,27 @@
+Current Task:
+download and setup recently made (<40 days), SOTA, quantized models into a flask endpoint for high-speed local inference.
+prompt engineer and optomize hyperparameters of these models for local inference
+test and evaluate the effects of the changes of various hyperparameter and prompt engineering changes on each reward model
+record results of tests, show how certain changes in the model configuration affected the average change of the final reward score
+use data from tests to develop a strategy for implementing the highest scoring local models, with specific configurations
+create a backend with flask that can receive text inputs and direct the request to the best 2-3 models for that question type and return those answers
+create an ensemble style approach to consistently score very high with every prompt in the sample dataset
+automate everything as possible, log all results, and present findings after each day of work
+
+
+Reward model information:
+Final reward is based off of a weighted average of two open-source models 
+60% of the score is OpenAssistant/reward-model-deberta-v3-large-v2
+40% of the score is reciprocate/gpt-j_rm_format-oa
+
+the answer must pass a relevance masking, as defined by these two models
+bert-base-uncased
+sentence-transformers/all-mpnet-base-v2
+
+The relevance score is binary, if either model shows a fail (0) for relevance, the final score is 0.
+
+You can see all reward information by sending a json request to the reward endpoint.
+
+You can test this for a single prompt and a list of responses in ~/text_generation/test_models/test_reward_endpoint.py
+
+You should take advantage of the threaded script provided to you to quickly test any configurations that you try and see results across many prompts quickly.
