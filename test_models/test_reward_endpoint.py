@@ -2,7 +2,8 @@ import requests
 import json
 
 # Endpoint URL
-url = "http://url:port"
+# url = "http://url:port"
+url = "http://213.173.102.136:10400"
 
 # Data to send
 data = {
