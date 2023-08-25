@@ -2,10 +2,11 @@ import logging
 
 from backend.api.dependencies import GPTQInference, llm_dependency
 from backend.api.schemas import Request, Response
+from backend.pipelines.models import MODELS_INFO
 from fastapi import Depends, Header, HTTPException
 from fastapi.routing import APIRouter
 
-AVAILABLE_MODELS = ["gpt4-x-vicuna-13B-GPTQ"]
+AVAILABLE_MODELS = list(MODELS_INFO.keys())
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
