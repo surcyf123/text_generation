@@ -27,7 +27,10 @@ def get_evaluation(evaluation_url, json_payload):
 
 def get_model_response(prompt, model):
     start_time = time.time()
-    response = model.generate(prompt)
+    full_response = model.generate(prompt)
+    # extract assistant only response
+    start_index = full_response.find("### Assistant:") + len("### Assistant:")
+    response = full_response[start_index:]
     end_time = time.time()
     elapsed_time = end_time - start_time
     return elapsed_time, response
