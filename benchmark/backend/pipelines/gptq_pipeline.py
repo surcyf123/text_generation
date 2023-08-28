@@ -9,8 +9,10 @@ class GPTQInference:
 
     def generate(self, prompt):
         # use prompt template to normalize LLMs answers
+        prompt_template = f"""Human{prompt}
+        ### Assistant:"""
 
-        return self.pipeline(prompt)[0]["generated_text"]
+        return self.pipeline(prompt_template)[0]["generated_text"]
 
     def load_model(self, model_dir: str, model_name: str):
         quantize_config = BaseQuantizeConfig(bits=4, group_size=128, desc_act=False)
