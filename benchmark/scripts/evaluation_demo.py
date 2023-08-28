@@ -104,7 +104,13 @@ def generate_evaluation_json_list(
 
 @click.command()
 @click.option("--prompts", "prompts_path", required=True)
-@click.option("--model", "model_name", required=False, default=AVAILABLE_MODELS[0])
+@click.option(
+    "--model",
+    "model_name",
+    required=False,
+    default=AVAILABLE_MODELS[0],
+    help=f"Available models: {AVAILABLE_MODELS}",
+)
 @click.option("--output-dir", "output_dir", required=False, default=DEFAULT_OUTPUT_DIR)
 def main(
     prompts_path: str,
