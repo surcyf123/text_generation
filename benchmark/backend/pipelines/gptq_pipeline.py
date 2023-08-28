@@ -1,3 +1,5 @@
+import gc
+
 from auto_gptq import AutoGPTQForCausalLM, BaseQuantizeConfig
 from transformers import AutoTokenizer, logging, pipeline
 
@@ -47,3 +49,4 @@ class GPTQInference:
         del self.tokenizer
         del self.pipeline
         del self.model
+        gc.collect()
