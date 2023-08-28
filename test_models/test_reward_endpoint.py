@@ -4,7 +4,7 @@ import json
 # Endpoint URL
 # url = "http://url:port"
 url = "http://213.173.102.136:10400"
-
+# "http://213.173.102.136:10400", "http://213.173.102.136:10401", "http://213.173.102.136:10402"
 # Data to send
 data = {
     "verify_token": "SjhSXuEmZoW#%SD@#nAsd123bash#$%&@n",  # Your authentication token
@@ -19,7 +19,16 @@ Nobel Selection Process: The process for awarding the Nobel Prize is notoriously
 Given the above, it's not unusual that it took nearly 50 years for Nambu's work to be recognized with a Nobel Prize.
 As for a related and insightful question: Can you elaborate on the specific contributions Nambu made in the field of spontaneous symmetry breaking, and how these contributions influenced the work of other physicists like Higgs and Englert?
  ''',
+ 'This is a bad answer that does not relate to the prompt so it will receive lower scores for both reward models and a 0 for the relevance filter, making the total score 0.',
+         '''
+Groundbreaking Work: The initial work by Nambu on spontaneous symmetry breaking was indeed groundbreaking. However, groundbreaking work is often ahead of its time, and it can take years, sometimes decades, for the full impact of such work to be understood and appreciated by the wider scientific community.
+Experimental Confirmation: Theoretical physics is full of brilliant ideas, but not all of them are correct. It often takes considerable time to gather the experimental evidence needed to confirm or refute theoretical predictions. In Nambu's case, his theories were eventually confirmed by the discovery of the Higgs boson in 2012, which required the construction of the Large Hadron Collider, a project of unprecedented scale in experimental physics.
+Nobel Selection Process: The process for awarding the Nobel Prize is notoriously selective and conservative. It often takes many years, sometimes decades, for a discovery to be deemed "Nobel worthy". This is in part because the committee tends to award those whose contributions have stood the test of time and have been thoroughly vetted by the scientific community.
+Given the above, it's not unusual that it took nearly 50 years for Nambu's work to be recognized with a Nobel Prize.
+As for a related and insightful question: Can you elaborate on the specific contributions Nambu made in the field of spontaneous symmetry breaking, and how these contributions influenced the work of other physicists like Higgs and Englert?
+ ''',
  'This is a bad answer that does not relate to the prompt so it will receive lower scores for both reward models and a 0 for the relevance filter, making the total score 0.'
+   
     ]
 }
 
@@ -28,3 +37,6 @@ response = requests.post(url, json=data)
 
 # Print the response
 print(json.dumps(response.json()))
+
+with open('test_reward_endpoint.json', 'w') as f:
+    json.dump(response.json(), f)
