@@ -1,4 +1,25 @@
-# Backend
+# Benchmark
+
+Evaluate GPTQ LLM's models.
+
+## Installation
+
+Create and enter to a conda env:
+
+```bash
+conda create -n benchmark python=3.11 -y
+conda activate benchmark
+```
+
+Install requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+Install AutoGPTQ
+
+Follow the instructions to install [AutoGPTQ](https://github.com/PanQiWei/AutoGPTQ) package.
 
 ## Usage
 

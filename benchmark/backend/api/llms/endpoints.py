@@ -35,11 +35,9 @@ async def ask_llm(
     model_name: str = Header(None),
     llm_dependency: GPTQInference = Depends(custom_llm_dependency),
 ) -> Response:
-    """Endpoint to ask an llm"""
     query = request.query
     logger.info(f"{model_name} User query: {query}")
     answer = llm_dependency.generate(query)
     llm_dependency.unload_model()
 
-    # answer = "works"
     return {"answer": answer}
