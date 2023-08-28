@@ -3,10 +3,10 @@ MODELS_INFO = {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/airoboros-13B-GPTQ",
     },
-    "bluemoonrp-13b": {
-        "model_file": "bluemoonrp-13b-4k-epoch6-4bit-128g",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/bluemoonrp-13b",
-    },
+    #"bluemoonrp-13b": {
+    #    "model_file": "bluemoonrp-13b-4k-epoch6-4bit-128g",
+    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/bluemoonrp-13b",
+    #},
     "gpt4-x-vicuna-13B-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/gpt4-x-vicuna-13B-GPTQ",
@@ -39,18 +39,14 @@ MODELS_INFO = {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/stable-vicuna-13B-GPTQ",
     },
-    "vicuna-7B-GPTQ-4bit-128g": {
-        "model_file": "model",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/vicuna-7B-GPTQ-4bit-128g",
-    },
-    "vicuna-7B-GPTQ-4bit-128g": {
-        "model_file": "model",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/vicuna-7B-GPTQ-4bit-128g",
-    },
-    "open_llama_3b_4bit_128g": {
-        "model_file": "model",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/open_llama_3b_4bit_128g",
-    }
+    #"vicuna-7B-GPTQ-4bit-128g": {
+    #    "model_file": "model",
+    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/vicuna-7B-GPTQ-4bit-128g",
+    #},
+    #"open_llama_3b_4bit_128g": {
+    #    "model_file": "model",
+    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/open_llama_3b_4bit_128g",
+    #}
 }
 
 

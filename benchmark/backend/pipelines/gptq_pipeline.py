@@ -8,9 +8,9 @@ class GPTQInference:
         self.pipeline, self.model = self.load_model(model_dir, model_name)
 
     def generate(self, prompt):
-        input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.cuda()
-        output = self.model.generate(inputs=input_ids, max_new_tokens=512)
-        return self.tokenizer.decode(output[0])
+        # use prompt template to normalize LLMs answers
+
+        return self.pipeline(prompt)[0]["generated_text"]
 
     def load_model(self, model_dir: str, model_name: str):
         quantize_config = BaseQuantizeConfig(bits=4, group_size=128, desc_act=False)
