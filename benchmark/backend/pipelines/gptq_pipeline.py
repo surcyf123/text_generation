@@ -50,5 +50,3 @@ class GPTQInference:
         del self.pipeline
         del self.model
         gc.collect()
-
-#ValueError: Exllama kernel does not support query/key/value fusion with act-order. Please either use inject_fused_attention=False or disable_exllama=True.
