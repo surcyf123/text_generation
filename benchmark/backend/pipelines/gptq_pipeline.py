@@ -11,7 +11,7 @@ class GPTQInference:
 
     def generate(self, prompt):
         # use prompt template to normalize LLMs answers
-        prompt_template = f"""Human{prompt}
+        prompt_template = f"""###Human {prompt}
         ### Assistant:"""
 
         return self.pipeline(prompt_template)[0]["generated_text"]
