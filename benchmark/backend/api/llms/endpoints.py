@@ -32,9 +32,32 @@ async def custom_llm_dependency(model_name: str = Header(None)):
 @router.post("/generate")
 async def ask_llm(
     request: Request,
-    model_name: str = Header(None),
+    model_name: str = Header(None, description=f"One of the followings: {AVAILABLE_MODELS}"),
     llm_dependency: GPTQInference = Depends(custom_llm_dependency),
 ) -> Response:
+    """
+    Generate an answer using a language model.
+    
+    This route generates an answer using a language model based on the provided query.
+    
+    Parameters:
+      - **model_name**: The name of the language model to use. (Header)
+
+    Avilable models: [
+        airoboros-13B-GPTQ,
+        Metharme-13b-4bit-GPTQ,
+        gpt4-x-vicuna-13B-GPTQ,
+        GPT4All-13B-snoozy-GPTQ,
+        koala-13B-GPTQ-4bit-128g,
+        Llama-2-13B-GPTQ,
+        Manticore-13B-GPTQ,
+        Nous-Hermes-13B-GPTQ,
+        stable-vicuna-13B-GPTQ,
+        guanaco-33B-GPTQ,
+        tulu-30B-GPTQ,
+        WizardLM-30B-Uncensored-GPTQ
+    ]
+    """
     query = request.query
     logger.info(f"{model_name} User query: {query}")
     answer = llm_dependency.generate(query)
