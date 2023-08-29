@@ -5,9 +5,9 @@ from transformers import AutoTokenizer, logging, pipeline
 
 
 class GPTQInference:
-    def __init__(self, model_dir: str, model_name: str):
+    def __init__(self, model_dir: str, model_name: str, group_size: int):
         self.tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=True)
-        self.pipeline, self.model = self.load_model(model_dir, model_name)
+        self.pipeline, self.model = self.load_model(model_dir, model_name, group_size)
 
     def generate(self, prompt):
         # use prompt template to normalize LLMs answers
@@ -16,8 +16,8 @@ class GPTQInference:
 
         return self.pipeline(prompt_template)[0]["generated_text"]
 
-    def load_model(self, model_dir: str, model_name: str):
-        quantize_config = BaseQuantizeConfig(bits=4, group_size=128, desc_act=False)
+    def load_model(self, model_dir: str, model_name: str, group_size: int=128):
+        quantize_config = BaseQuantizeConfig(bits=4, group_size=group_size, desc_act=False)
 
         model = AutoGPTQForCausalLM.from_quantized(
             model_dir,
@@ -50,3 +50,5 @@ class GPTQInference:
         del self.pipeline
         del self.model
         gc.collect()
+
+#ValueError: Exllama kernel does not support query/key/value fusion with act-order. Please either use inject_fused_attention=False or disable_exllama=True.
