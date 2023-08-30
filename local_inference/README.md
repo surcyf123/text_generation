@@ -10,7 +10,7 @@ conda install -c "nvidia/label/cuda-12.1.0" cuda-toolkit #-- REPLACE THIS WITH Y
 python -m pip install cuda-python
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/\
 
-
+python -m pip install tqdm
 python -m pip install torch
 python -m pip install tiktoken
 python -m pip install -U bitsandbytes

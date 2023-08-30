@@ -9,14 +9,13 @@ import torch
 from transformers import AutoTokenizer, StoppingCriteria, StoppingCriteriaList
 from typing import List
 from auto_gptq import AutoGPTQForCausalLM
-use_triton = False
 
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path,
                                           use_fast=False,
                                           trust_remote_code=True)
 
 class StoppingCriteriaSub(StoppingCriteria):
-    def __init__(self, stops = [], encounters=1):
+    def __init__(self, stops = []):
         super().__init__()
         self.stops = [stop.to("cuda") for stop in stops]
 
@@ -38,7 +37,7 @@ model = AutoGPTQForCausalLM.from_quantized(model_name_or_path,
                                            use_safetensors=False,
                                            trust_remote_code=True,
                                            device="cuda:0",
-                                           use_triton=use_triton)
+                                           use_triton=False)
 
 def generate_output(text,max_new_tokens,temperature,top_p,top_k,repetition_penalty,stop_tokens):
     input_ids = tokenizer(text, return_tensors="pt").input_ids.to("cuda")
