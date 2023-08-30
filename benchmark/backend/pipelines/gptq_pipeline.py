@@ -6,7 +6,9 @@ from transformers import AutoTokenizer, logging, pipeline
 
 class GPTQInference:
     def __init__(self, model_dir: str, model_name: str, group_size: int):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=True, unk_token="<unk>",
+                                                    bos_token="<s>",
+                                                    eos_token="</s>")
         self.pipeline, self.model = self.load_model(model_dir, model_name, group_size)
 
     def generate(self, prompt):
