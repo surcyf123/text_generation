@@ -75,11 +75,13 @@ def generate_evaluation_json_list(
     # load model
     model_dir = MODELS_INFO[model_name]["model_dir"]
     file_name = MODELS_INFO[model_name]["model_file"]
-    model = GPTQInference(model_dir, file_name)
+    group_size = MODELS_INFO[model_name]["group_size"]
 
-    logger.info(f"Max number of prompts to process: {n_prompts}")
-    for idx, prompt in enumerate(prompts_df[:n_prompts]):
-        logger.info(f"Sending prompt #{idx+1} of {n_prompts}")
+    model = GPTQInference(model_dir, file_name, group_size)
+
+    #logger.info(f"Max number of prompts to process: {n_prompts}")
+    for idx, prompt in enumerate(prompts_df):
+        logger.info(f"{model_name}: Sending prompt #{idx+1} of 1000")
         elapsed_time, text_response = get_model_response(prompt, model)
         json_payload = {
             "verify_token": "SjhSXuEmZoW#%SD@#nAsd123bash#$%&@n",
@@ -97,7 +99,7 @@ def generate_evaluation_json_list(
     del model
 
     result_df = convert_to_pd(evaluations_json_list)
-    save_path = os.path.join(output_dir, "evaluation_results.csv")
+    save_path = os.path.join(output_dir, f"{model_name}_evaluation_results.csv")
     logging.info(f"Saving evaluation results in {save_path}")
     result_df.to_csv(save_path)
 
@@ -108,7 +110,7 @@ def generate_evaluation_json_list(
     "--model",
     "model_name",
     required=False,
-    default=AVAILABLE_MODELS[0],
+    default=None,
     help=f"Available models: {AVAILABLE_MODELS}",
 )
 @click.option("--output-dir", "output_dir", required=False, default=DEFAULT_OUTPUT_DIR)
@@ -117,9 +119,22 @@ def main(
     model_name: str = AVAILABLE_MODELS[0],
     output_dir: str = DEFAULT_OUTPUT_DIR,
 ) -> None:
-    generate_evaluation_json_list(
-        prompts_path, model_name, DEFAULT_EVALUATION_URL, output_dir
-    )
+
+    if not model_name:
+        for model_name in AVAILABLE_MODELS:
+            logger.info(f"Evaluating {model_name}")
+            if not os.path.exists(os.path.join(output_dir, f"{model_name}_evaluation_results.csv")):
+                generate_evaluation_json_list(
+                    prompts_path, model_name, DEFAULT_EVALUATION_URL, output_dir
+                )
+            else:
+                logger.info(f"{model_name} already evaluated...")
+    else:
+        logger.info(f"Evaluating {model_name}")
+        generate_evaluation_json_list(
+            prompts_path, model_name, DEFAULT_EVALUATION_URL, output_dir
+        )
+
 
 
 if __name__ == "__main__":

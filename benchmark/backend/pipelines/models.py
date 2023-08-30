@@ -16,6 +16,7 @@ MODELS_INFO = {
     "GPT4All-13B-snoozy-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/GPT4All-13B-snoozy-GPTQ",
+        "group_size": 128
     },
     "koala-13B-GPTQ-4bit-128g": {
         "model_file": "model",
