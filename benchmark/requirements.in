@@ -3,3 +3,5 @@ uvicorn
 fastapi
 pandas
 flask
+sentencepiece
+protobuf
