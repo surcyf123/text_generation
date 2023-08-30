@@ -40,8 +40,8 @@ model = AutoGPTQForCausalLM.from_quantized(model_name_or_path,
                                            device="cuda:0",
                                            use_triton=use_triton)
 
-def generate_output(system_prompt,text,max_new_tokens,temperature,top_p,top_k,repetition_penalty,stop_tokens):
-    input_ids = tokenizer(system_prompt+text, return_tensors="pt").input_ids.to("cuda")
+def generate_output(text,max_new_tokens,temperature,top_p,top_k,repetition_penalty,stop_tokens):
+    input_ids = tokenizer(text, return_tensors="pt").input_ids.to("cuda")
     tokens = model.generate(
         inputs=input_ids,
         max_new_tokens=max_new_tokens,
@@ -61,7 +61,6 @@ def generate_text():
     data=request.json
     # Get the hyperparameters and prompt from request
     text = generate_output(
-        data['system_prompt'],
         data['prompt'],
         data['max_new_tokens'],
         data['temperature'],
@@ -71,9 +70,8 @@ def generate_text():
         data.get('stopwords', []))
     
     # Remove the prompts from the output
-    pruned_system = re.sub('<\|.*?\|>', '', data['system_prompt'])
-    pruned_user = re.sub('<\|.*?\|>', '', data['prompt'])
-    text = text.replace(pruned_system, "").replace(pruned_user, "")
+    pruned_prompt = re.sub('<\|.*?\|>', '', data['prompt'])
+    text = text.replace(pruned_prompt, "")
     
     # Remove StopToken from the Generation
     for stop in data.get('stopwords', []):
@@ -82,4 +80,4 @@ def generate_text():
     return jsonify({'text': text})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=6666)
+    app.run(debug=False, port=7777)
