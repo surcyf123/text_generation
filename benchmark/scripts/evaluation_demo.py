@@ -107,11 +107,11 @@ def generate_evaluation_json_list(
     del model
 
     result_df = convert_to_pd(evaluations_json_list)
-    save_path = os.path.join(output_dir, f"{model_name}_evaluation_results-test.csv")
+    save_path = os.path.join(output_dir, f"{model_name}_evaluation_results.csv")
     logging.info(f"Saving evaluation results in {save_path}")
     result_df.to_csv(save_path)
 
-    save_path = os.path.join(output_dir, f"{model_name}_llm_answers-test.json")
+    save_path = os.path.join(output_dir, f"{model_name}_llm_answers.json")
     logging.info(f"Saving answers results in {save_path}")
     with open(save_path, mode="w") as file:
         json.dump(answers, file, indent=4)

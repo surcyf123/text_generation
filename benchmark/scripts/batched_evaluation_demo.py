@@ -74,7 +74,7 @@ def generate_evaluation_json_list(
     group_size = MODELS_INFO[model_name]["group_size"]
 
     model = GPTQInference(model_dir, file_name, group_size)
-    
+
     if n_prompts == -1: n_prompts = prompts_df.shape[0]
     prompts = prompts_df[:n_prompts]
 
@@ -117,11 +117,11 @@ def generate_evaluation_json_list(
     del model
 
     result_df = convert_to_pd(evaluations_json_list)
-    save_path = os.path.join(output_dir, f"{model_name}_evaluation_results_2.csv")
+    save_path = os.path.join(output_dir, f"{model_name}_evaluation_results.csv")
     logging.info(f"Saving evaluation results in {save_path}")
     result_df.to_csv(save_path)
 
-    save_path = os.path.join(output_dir, f"{model_name}_llm_answers_2.json")
+    save_path = os.path.join(output_dir, f"{model_name}_llm_answers.json")
     logging.info(f"Saving answers results in {save_path}")
     with open(save_path, mode="w") as file:
         json.dump(answers, file, indent=4)
