@@ -20,6 +20,18 @@ class GPTQInference:
 
         return self.pipeline(prompt_template)[0]["generated_text"]
 
+    def generate_batch(self, prompts, batch_size=8):
+        prompt_templates = [f"""
+            Demonstrate a potential experiment while utilizing and enumerating the scientific method clearly and explain every step for a potential theory of the following context.
+            ### USER: {prompt}
+            <\s> 
+
+            ASSISTANT:"""
+            for prompt in prompts
+        ]
+        results = self.pipeline(prompt_templates, batch_size=batch_size)
+        return [result[0]["generated_text"] for result in results]
+
     def load_model(self, model_dir: str, model_name: str, group_size: int=128):
         quantize_config = BaseQuantizeConfig(bits=4, group_size=group_size, desc_act=False)
 

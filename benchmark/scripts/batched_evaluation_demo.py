@@ -25,17 +25,12 @@ def get_evaluation(evaluation_url, json_payload):
     response = requests.post(evaluation_url, json=json_payload)
     return response.json()
 
-
-def get_model_response(prompt, model):
+def get_model_response(prompts, batch_size, model):
     start_time = time.time()
-    full_response = model.generate(prompt)
-    # extract assistant only response
-    start_index = full_response.find("ASSISTANT:") + len("ASSISTANT:")
-    response = full_response[start_index:]
+    batch_responses = model.generate_batch(prompts, batch_size)
     end_time = time.time()
     elapsed_time = end_time - start_time
-    return elapsed_time, response
-
+    return elapsed_time/len(prompts), batch_responses
 
 def convert_to_pd(evaluations_json_list):
     evaluation_data_list = []
@@ -50,7 +45,7 @@ def convert_to_pd(evaluations_json_list):
                 relevance_filter,
                 rlhf_reward_model,
                 evaluation_json["rewards"][0],
-                evaluation_json["time_elapsed_in_seconds"],
+                evaluation_json["avg_time_elapsed_in_seconds"],
             ]
         )
     evaluation_df = pd.DataFrame(
@@ -60,7 +55,7 @@ def convert_to_pd(evaluations_json_list):
             "relevance_filter",
             "rlhf_reward_model",
             "rewards",
-            "time_elapsed_in_seconds",
+            "avg_time_elapsed_in_seconds",
         ],
     )
     return evaluation_df
@@ -81,23 +76,38 @@ def generate_evaluation_json_list(
     model = GPTQInference(model_dir, file_name, group_size)
 
     if n_prompts == -1: n_prompts = prompts_df.shape[0]
-    logger.info(f"Max number of prompts to process: {n_prompts}")
-    start_time = time.time()
+    prompts = prompts_df[:n_prompts]
+
+    batch_size = 2
     answers={}
-    for idx, prompt in enumerate(prompts_df[:n_prompts]):
-        logger.info(f"{model_name}: Sending prompt #{idx+1} of {n_prompts}")
-        elapsed_time, text_response = get_model_response(prompt, model)
-        json_payload = {
-            "verify_token": "SjhSXuEmZoW#%SD@#nAsd123bash#$%&@n",
-            "prompt": prompt,
-            "responses": [
-                text_response,
-            ],
-        }
-        evaluation_json = get_evaluation(evaluation_url, json_payload)
-        evaluation_json["time_elapsed_in_seconds"] = elapsed_time
-        answers[f"{idx+2}"] = text_response
-        evaluations_json_list.append(evaluation_json)
+    idx = 2
+
+    start_time = time.time()
+    for batch_start in range(0, len(prompts), batch_size):
+        batch_prompts = prompts[batch_start : batch_start + batch_size]
+        logger.info(
+            f"{model_name}: Sending prompts {batch_start+1} to {batch_start + len(batch_prompts)} of {len(prompts)}" 
+        )
+
+        avg_elapsed_time, batch_responses = get_model_response(batch_prompts, batch_size, model)
+
+        for prompt, text_response in zip(batch_prompts, batch_responses):
+            logger.info(f"{model_name} Evaluating batch")
+            start_index = text_response.find("ASSISTANT:") + len("ASSISTANT:")
+            response = text_response[start_index:]
+
+            json_payload = {
+                "verify_token": "SjhSXuEmZoW#%SD@#nAsd123bash#$%&@n",
+                "prompt": prompt,
+                "responses": [
+                    response,
+                ],
+            }
+            evaluation_json = get_evaluation(evaluation_url, json_payload)
+            evaluation_json["avg_time_elapsed_in_seconds"] = avg_elapsed_time
+            answers[f"{idx}"] = response
+            evaluations_json_list.append(evaluation_json)
+            idx += 1
     end_time = time.time()
     elapsed_time = end_time - start_time
     logger.info(f"TOTAL ELAPSED TIME: {elapsed_time}")
