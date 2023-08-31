@@ -69,7 +69,7 @@ async def ask_llm(
     """
     global default_model_name
     query = request.query
-    logger.info(f"default: {default_model_name} - {model_name} User query: {query}")
+    logger.info(f"{default_model_name} User query: {query}")
     answer = llm_dependency.generate(query)
     start_index = answer.find("ASSISTANT:") + len("ASSISTANT:")
     response = answer[start_index:]
