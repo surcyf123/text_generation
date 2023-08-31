@@ -11,8 +11,12 @@ class GPTQInference:
 
     def generate(self, prompt):
         # use prompt template to normalize LLMs answers
-        prompt_template = f"""###Human: {prompt}
-        ### Assistant:"""
+        prompt_template = f"""
+        Demonstrate a potential experiment while utilizing and enumerating the scientific method clearly and explain every step for a potential theory of the following context.
+        ### USER: {prompt}
+        <\s> 
+
+        ASSISTANT:"""
 
         return self.pipeline(prompt_template)[0]["generated_text"]
 
@@ -37,10 +41,13 @@ class GPTQInference:
             "text-generation",
             model=model,
             tokenizer=self.tokenizer,
-            max_new_tokens=512,
-            # temperature=0.7,
+            max_new_tokens=1024,
+            min_new_tokens=512, #transformers.GenerationConfig
+            #temperature=0.7,
             # top_p=0.95,
             repetition_penalty=1.15,
+            #do_sample=True
+            
         )
 
         return pipe, model
