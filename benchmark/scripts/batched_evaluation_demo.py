@@ -74,7 +74,6 @@ def generate_evaluation_json_list(
     group_size = MODELS_INFO[model_name]["group_size"]
 
     model = GPTQInference(model_dir, file_name, group_size)
-
     if n_prompts == -1: n_prompts = prompts_df.shape[0]
     prompts = prompts_df[:n_prompts]
 
