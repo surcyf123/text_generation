@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 import time
+import json
 
 import click
 import pandas as pd
@@ -29,7 +30,7 @@ def get_model_response(prompt, model):
     start_time = time.time()
     full_response = model.generate(prompt)
     # extract assistant only response
-    start_index = full_response.find("### Assistant:") + len("### Assistant:")
+    start_index = full_response.find("ASSISTANT:") + len("ASSISTANT:")
     response = full_response[start_index:]
     end_time = time.time()
     elapsed_time = end_time - start_time
@@ -80,7 +81,8 @@ def generate_evaluation_json_list(
     model = GPTQInference(model_dir, file_name, group_size)
 
     #logger.info(f"Max number of prompts to process: {n_prompts}")
-    for idx, prompt in enumerate(prompts_df):
+    answers={}
+    for idx, prompt in enumerate(prompts_df[:500]):
         logger.info(f"{model_name}: Sending prompt #{idx+1} of 1000")
         elapsed_time, text_response = get_model_response(prompt, model)
         json_payload = {
@@ -92,6 +94,7 @@ def generate_evaluation_json_list(
         }
         evaluation_json = get_evaluation(evaluation_url, json_payload)
         evaluation_json["time_elapsed_in_seconds"] = elapsed_time
+        answers[f"{idx+2}"] = text_response
         evaluations_json_list.append(evaluation_json)
 
     # unload model
@@ -102,6 +105,11 @@ def generate_evaluation_json_list(
     save_path = os.path.join(output_dir, f"{model_name}_evaluation_results.csv")
     logging.info(f"Saving evaluation results in {save_path}")
     result_df.to_csv(save_path)
+
+    save_path = os.path.join(output_dir, f"{model_name}_llm_answers.json")
+    logging.info(f"Saving answers results in {save_path}")
+    with open(save_path, mode="w") as file:
+        json.dump(answers, file, indent=4)
 
 
 @click.command()
@@ -116,7 +124,7 @@ def generate_evaluation_json_list(
 @click.option("--output-dir", "output_dir", required=False, default=DEFAULT_OUTPUT_DIR)
 def main(
     prompts_path: str,
-    model_name: str = AVAILABLE_MODELS[0],
+    model_name: str,
     output_dir: str = DEFAULT_OUTPUT_DIR,
 ) -> None:
 
