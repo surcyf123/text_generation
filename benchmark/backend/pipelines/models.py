@@ -4,10 +4,11 @@ MODELS_INFO = {
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/airoboros-13B-GPTQ",
         "group_size": 128
     },
-    #"bluemoonrp-13b": {
-    #    "model_file": "bluemoonrp-13b-4k-epoch6-4bit-128g",
-    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/bluemoonrp-13b",
-    #},
+    "bluemoonrp-13b": {
+        "model_file": "bluemoonrp-13b-4k-epoch6-4bit-128g",
+        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/bluemoonrp-13b",
+        "group_size": 128
+    },
     "gpt4-x-vicuna-13B-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/gpt4-x-vicuna-13B-GPTQ",
@@ -48,24 +49,19 @@ MODELS_INFO = {
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/stable-vicuna-13B-GPTQ",
         "group_size": 128
     },
-    #"vicuna-7B-GPTQ-4bit-128g": {
-    #    "model_file": "model",
-    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/vicuna-7B-GPTQ-4bit-128g",
-    #},
-    #"open_llama_3b_4bit_128g": {
-    #    "model_file": "model",
-    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/open_llama_3b_4bit_128g",
-    #}
     "guanaco-33B-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/guanaco-33B-GPTQ",
         "group_size": -1
     },
-    #"h2ogpt-oasst1-512-30B-GPTQ": {
-    #    "model_file": "model",
-    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/h2ogpt-oasst1-512-30B-GPTQ",
-    #    "group_size": -1
-    #},
+    "h2ogpt-oasst1-512-30B-GPTQ": {
+        "model_file": "model",
+        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/h2ogpt-oasst1-512-30B-GPTQ",
+        "group_size": -1,
+        "unk_token": "<unk>",
+        "bos_token":"<s>",
+        "eos_token": "<\s>"
+    },
     "tulu-30B-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/tulu-30B-GPTQ",

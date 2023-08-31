@@ -45,6 +45,7 @@ async def ask_llm(
 
     Avilable models: [
         airoboros-13B-GPTQ,
+        bluemoonrp-13b,
         Metharme-13b-4bit-GPTQ,
         gpt4-x-vicuna-13B-GPTQ,
         GPT4All-13B-snoozy-GPTQ,
@@ -54,6 +55,7 @@ async def ask_llm(
         Nous-Hermes-13B-GPTQ,
         stable-vicuna-13B-GPTQ,
         guanaco-33B-GPTQ,
+        h2ogpt-oasst1-512-30B-GPTQ,
         tulu-30B-GPTQ,
         WizardLM-30B-Uncensored-GPTQ
     ]
@@ -61,6 +63,8 @@ async def ask_llm(
     query = request.query
     logger.info(f"{model_name} User query: {query}")
     answer = llm_dependency.generate(query)
+    start_index = answer.find("ASSISTANT:") + len("ASSISTANT:")
+    response = answer[start_index:]
     llm_dependency.unload_model()
 
-    return {"answer": answer}
+    return {"answer": response}
