@@ -25,3 +25,12 @@ python -m pip install -U git+https://github.com/huggingface/accelerate.git
 `python -m pip install torch torchvision torchaudio`
 `python -m pip install vllm`
 
+### VastAI setup
+
+```bash
+pip3 install tqdm torch tiktoken transformers peft accelerate torchvision torchaudio vllm auto-gptq optimum
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
+git lfs install
+git lfs clone
+```

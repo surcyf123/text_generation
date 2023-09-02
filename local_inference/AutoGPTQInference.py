@@ -4,16 +4,14 @@ import sys
 
 
 model_name_or_path = sys.argv[1]
-model_basename = sys.argv[2]
 
 
 from flask import Flask, request, jsonify
 
 import accelerate
 import torch
-from transformers import AutoTokenizer, StoppingCriteria, StoppingCriteriaList
+from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList
 from typing import List
-from auto_gptq import AutoGPTQForCausalLM
 
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path,
                                           use_fast=False,
@@ -37,9 +35,8 @@ def convert_stopwords_to_ids(stopwords : List[str]):
     return stopping_criteria
 
 
-model = AutoGPTQForCausalLM.from_quantized(model_name_or_path,
-                                           model_basename=model_basename,
-                                           use_safetensors=False,
+model = AutoModelForCausalLM.from_quantized(model_name_or_path,
+                                           torch_dtype=torch.float16
                                            trust_remote_code=True,
                                            device="cuda:0",
                                            use_triton=False)
