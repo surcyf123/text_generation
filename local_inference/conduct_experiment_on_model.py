@@ -54,7 +54,7 @@ def get_scores_from_reward_model(original_prompt:str,response:str) -> Dict:
 
 # Initialize CSV file and writer
 model_name = "TheBloke/Asclepius-13B-GPTQ"
-with open(f'{model_name.replace("/","-").csv}', mode='a', newline='') as csv_file:
+with open(f'results/{model_name.replace("/","-").csv}', mode='a', newline='') as csv_file:
     
     fieldnames = ['prompt_index', 'temperature', 'top_p', 'top_k', 'repetition_penalty', 'duration',
                   'reciprocate_reward', 'relevance_filter', 'rlhf_reward', 'combined_reward']

@@ -38,8 +38,7 @@ def convert_stopwords_to_ids(stopwords : List[str]):
 model = AutoModelForCausalLM.from_quantized(model_name_or_path,
                                            torch_dtype=torch.float16,
                                            trust_remote_code=True,
-                                           device="cuda:0",
-                                           use_triton=False)
+                                           device_map="cuda:0")
 
 def generate_output(text,max_new_tokens,temperature,top_p,top_k,repetition_penalty,stop_tokens):
     input_ids = tokenizer(text, return_tensors="pt").input_ids.to("cuda")
