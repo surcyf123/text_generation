@@ -1,6 +1,11 @@
+import sys
+# model_name_or_path = "seonglae/opt-125m-4bit-gptq"
+# model_basename = "gptq_model-4bit-128g"
 
-model_name_or_path = "seonglae/opt-125m-4bit-gptq"
-model_basename = "gptq_model-4bit-128g"
+
+model_name_or_path = sys.argv[1]
+model_basename = sys.argv[2]
+
 
 from flask import Flask, request, jsonify
 

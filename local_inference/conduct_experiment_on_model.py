@@ -11,10 +11,10 @@ with open("dataset/only_prompts.json", "r") as f:
     
 
 hyperparameter_searches = {
-    "temperature" : [0.1,0.3,0.5,0.7,0.9],
-    "top_p" : [0.1,0.3,0.5,0.7,0.9],
-    "top_k" : [1,3,5,12,20,30],
-    "repetition_penalty" : [1.0,1.1,1.2,1.3]
+    "temperature" : [0.7],
+    "top_p" : [0.7],
+    "top_k" : [None],
+    "repetition_penalty" : [None]
 }
 
 def call_model_with_params(prompt:str,temperature:float, top_p:float, top_k:int, repetition_penalty:float) -> Tuple[str,float]:
@@ -53,7 +53,7 @@ def get_scores_from_reward_model(original_prompt:str,response:str) -> Dict:
     
 
 # Initialize CSV file and writer
-with open("hyperparameter_search_results.csv", mode='w', newline='') as csv_file:
+with open("hyperparameter_search_results.csv", mode='a', newline='') as csv_file:
     fieldnames = ['prompt_index', 'temperature', 'top_p', 'top_k', 'repetition_penalty', 'duration',
                   'reciprocate_reward', 'relevance_filter', 'rlhf_reward', 'combined_reward']
     csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
