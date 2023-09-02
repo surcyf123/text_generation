@@ -36,7 +36,7 @@ def convert_stopwords_to_ids(stopwords : List[str]):
 
 
 model = AutoModelForCausalLM.from_quantized(model_name_or_path,
-                                           torch_dtype=torch.float16
+                                           torch_dtype=torch.float16,
                                            trust_remote_code=True,
                                            device="cuda:0",
                                            use_triton=False)
