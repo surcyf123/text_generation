@@ -1,4 +1,5 @@
 # %%
+model_name = "TheBloke/Asclepius-13B-GPTQ"
 import requests
 import json
 import time
@@ -11,7 +12,7 @@ with open("../dataset/only_prompts.json", "r") as f:
     
 
 hyperparameter_searches = {
-    "num_tokens" : 300,
+    "num_tokens" : [100,200,300,400,500],
     "temperature" : [0.7],
     "top_p" : [0.7],
     "top_k" : [None],
@@ -54,7 +55,6 @@ def get_scores_from_reward_model(original_prompt:str,response:str) -> Dict:
     
 
 # Initialize CSV file and writer
-model_name = "TheBloke/Asclepius-13B-GPTQ"
 with open(f'results/{hyperparameter_searches["num_tokens"]}-{model_name.replace("/","-")}.csv', mode='x', newline='') as csv_file:
     
     fieldnames = ['prompt_index', 'temperature', 'top_p', 'top_k', 'repetition_penalty', 'duration',
@@ -66,34 +66,36 @@ with open(f'results/{hyperparameter_searches["num_tokens"]}-{model_name.replace(
     
     # Loop through the prompts and hyperparameters
     for i, prompt in tqdm(enumerate(prompts)):
-        for temperature in hyperparameter_searches["temperature"]:
-            for top_p in hyperparameter_searches["top_p"]:
-                for top_k in hyperparameter_searches["top_k"]:
-                    for repetition_penalty in hyperparameter_searches["repetition_penalty"]:
-                        
-                        generated_text, duration = call_model_with_params(prompt, temperature, top_p, top_k, repetition_penalty)
-                        reward_scores = get_scores_from_reward_model(prompt, generated_text)
-                        
-                        reciprocate_reward = reward_scores["reward_details"]["reciprocate_reward_model"][0]
-                        relevance_filter = reward_scores["reward_details"]["relevance_filter"][0]
-                        rlhf_reward = reward_scores["reward_details"]["rlhf_reward_model"][0]
-                        combined_reward = reward_scores["rewards"][0]
-                        
-                        # Write a row to the CSV file
-                        csv_writer.writerow({
-                            'prompt_index': i,
-                            'temperature': temperature,
-                            'top_p': top_p,
-                            'top_k': top_k,
-                            'repetition_penalty': repetition_penalty,
-                            'duration': duration,
-                            'reciprocate_reward': reciprocate_reward,
-                            'relevance_filter': relevance_filter,
-                            'rlhf_reward': rlhf_reward,
-                            'combined_reward': combined_reward,
-                            'prompt' : prompt,
-                            'generated_text' : generated_text
-                        })
+        for num_tokens in hyperparameter_searches["num_tokens"]:
+            for temperature in hyperparameter_searches["temperature"]:
+                for top_p in hyperparameter_searches["top_p"]:
+                    for top_k in hyperparameter_searches["top_k"]:
+                        for repetition_penalty in hyperparameter_searches["repetition_penalty"]:
+                            
+                            generated_text, duration = call_model_with_params(prompt, temperature, top_p, top_k, repetition_penalty)
+                            reward_scores = get_scores_from_reward_model(prompt, generated_text)
+                            
+                            reciprocate_reward = reward_scores["reward_details"]["reciprocate_reward_model"][0]
+                            relevance_filter = reward_scores["reward_details"]["relevance_filter"][0]
+                            rlhf_reward = reward_scores["reward_details"]["rlhf_reward_model"][0]
+                            combined_reward = reward_scores["rewards"][0]
+                            
+                            # Write a row to the CSV file
+                            csv_writer.writerow({
+                                'prompt_index': i,
+                                'num_tokens' : num_tokens,
+                                'temperature': temperature,
+                                'top_p': top_p,
+                                'top_k': top_k,
+                                'repetition_penalty': repetition_penalty,
+                                'duration': duration,
+                                'reciprocate_reward': reciprocate_reward,
+                                'relevance_filter': relevance_filter,
+                                'rlhf_reward': rlhf_reward,
+                                'combined_reward': combined_reward,
+                                'prompt' : prompt,
+                                'generated_text' : generated_text
+                            })
                     
                     
     
