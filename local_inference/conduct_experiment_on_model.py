@@ -6,11 +6,12 @@ from typing import Tuple, Dict
 import csv
 # %%
 from tqdm import tqdm
-with open("dataset/only_prompts.json", "r") as f:
+with open("../dataset/only_prompts.json", "r") as f:
     prompts = json.load(f)
     
 
 hyperparameter_searches = {
+    "num_tokens" : 300,
     "temperature" : [0.7],
     "top_p" : [0.7],
     "top_k" : [None],
@@ -21,7 +22,7 @@ def call_model_with_params(prompt:str,temperature:float, top_p:float, top_k:int,
     '''Returns the generated text, along with how long it took to execute'''
     data = {
     "prompt": prompt,
-    "max_new_tokens": 100,
+    "max_new_tokens": 300,
     "temperature": temperature,
     "top_p": top_p,
     "top_k": top_k,
@@ -54,7 +55,7 @@ def get_scores_from_reward_model(original_prompt:str,response:str) -> Dict:
 
 # Initialize CSV file and writer
 model_name = "TheBloke/Asclepius-13B-GPTQ"
-with open(f'results/{model_name.replace("/","-").csv}', mode='a', newline='') as csv_file:
+with open(f'results/{hyperparameter_searches["num_tokens"]}-{model_name.replace("/","-")}.csv', mode='x', newline='') as csv_file:
     
     fieldnames = ['prompt_index', 'temperature', 'top_p', 'top_k', 'repetition_penalty', 'duration',
                   'reciprocate_reward', 'relevance_filter', 'rlhf_reward', 'combined_reward','prompt','generated_text']
