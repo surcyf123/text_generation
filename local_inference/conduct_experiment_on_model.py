@@ -57,7 +57,7 @@ model_name = "TheBloke/Asclepius-13B-GPTQ"
 with open(f'results/{model_name.replace("/","-").csv}', mode='a', newline='') as csv_file:
     
     fieldnames = ['prompt_index', 'temperature', 'top_p', 'top_k', 'repetition_penalty', 'duration',
-                  'reciprocate_reward', 'relevance_filter', 'rlhf_reward', 'combined_reward']
+                  'reciprocate_reward', 'relevance_filter', 'rlhf_reward', 'combined_reward','prompt','generated_text']
     csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     
     # Write the header to the CSV file
@@ -89,7 +89,9 @@ with open(f'results/{model_name.replace("/","-").csv}', mode='a', newline='') as
                             'reciprocate_reward': reciprocate_reward,
                             'relevance_filter': relevance_filter,
                             'rlhf_reward': rlhf_reward,
-                            'combined_reward': combined_reward
+                            'combined_reward': combined_reward,
+                            'prompt' : prompt,
+                            'generated_text' : generated_text
                         })
                     
                     
