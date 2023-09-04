@@ -17,12 +17,7 @@ MODELS_INFO = {
     "GPT4All-13B-snoozy-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/GPT4All-13B-snoozy-GPTQ",
-        "group_size": 128
-    },
-    "koala-13B-GPTQ-4bit-128g": {
-        "model_file": "model",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/koala-13B-GPTQ-4bit-128g",
-        "group_size": 128
+        "group_size": 128 # requires pad_token_id
     },
     "Llama-2-13B-GPTQ": {
         "model_file": "model",
@@ -44,29 +39,24 @@ MODELS_INFO = {
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/Nous-Hermes-13B-GPTQ",
         "group_size": 128
     },
-    "stable-vicuna-13B-GPTQ": {
-        "model_file": "model",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/stable-vicuna-13B-GPTQ",
-        "group_size": 128
-    },
     "guanaco-33B-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/guanaco-33B-GPTQ",
         "group_size": -1
     },
-    "h2ogpt-oasst1-512-30B-GPTQ": {
-        "model_file": "model",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/h2ogpt-oasst1-512-30B-GPTQ",
-        "group_size": -1,
-        "unk_token": "<unk>",
-        "bos_token":"<s>",
-        "eos_token": "<\s>"
-    },
-    "tulu-30B-GPTQ": {
-        "model_file": "model",
-        "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/tulu-30B-GPTQ",
-        "group_size": -1
-    },
+    #"h2ogpt-oasst1-512-30B-GPTQ": {
+    #    "model_file": "model",
+    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/h2ogpt-oasst1-512-30B-GPTQ",
+    #    "group_size": -1,
+    #    "unk_token": "<unk>",
+    #    "bos_token":"<s>",
+    #    "eos_token": "<\s>"
+    #},
+    #"tulu-30B-GPTQ": {
+    #    "model_file": "model",
+    #    "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/tulu-30B-GPTQ",
+    #    "group_size": -1
+    #},
     "WizardLM-30B-Uncensored-GPTQ": {
         "model_file": "model",
         "model_dir": "/home/betogaona7/text_generation/benchmark/assets/quantized_models/WizardLM-30B-Uncensored-GPTQ",

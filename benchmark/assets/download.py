@@ -23,7 +23,7 @@ from huggingface_hub import snapshot_download
 def main(repository_id: str, output_dir: str):
     if not repository_id:
         models = [
-            "iambestfeed/open_llama_3b_4bit_128g",
+            #"iambestfeed/open_llama_3b_4bit_128g",
             "TheBloke/airoboros-13B-GPTQ",
             "reeducator/bluemoonrp-13b",
             "TehVenom/Metharme-13b-4bit-GPTQ",
@@ -31,14 +31,14 @@ def main(repository_id: str, output_dir: str):
             "TheBloke/GPT4All-13B-snoozy-GPTQ",
             "TheBloke/guanaco-33B-GPTQ",
             "TheBloke/h2ogpt-oasst1-512-30B-GPTQ",
-            "TheBloke/koala-13B-GPTQ-4bit-128g",
+            #"TheBloke/koala-13B-GPTQ-4bit-128g",
             "TheBloke/Llama-2-13B-GPTQ",
             "TheBloke/Manticore-13B-GPTQ",
             "TheBloke/Nous-Hermes-13B-GPTQ",
             "TheBloke/tulu-30B-GPTQ",
-            "TheBloke/stable-vicuna-13B-GPTQ",
+            #"TheBloke/stable-vicuna-13B-GPTQ",
             "TheBloke/WizardLM-30B-Uncensored-GPTQ",
-            "TheBloke/vicuna-7B-GPTQ-4bit-128g"
+            #"TheBloke/vicuna-7B-GPTQ-4bit-128g"
         ]
         for model in models: 
             save_path = os.path.join(output_dir, os.path.basename(model))
