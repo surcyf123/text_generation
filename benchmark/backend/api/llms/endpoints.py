@@ -17,6 +17,33 @@ router = APIRouter()
 default_model_name = "airoboros-13B-GPTQ"
 default_llm_dependency = llm_dependency(default_model_name)
 
+#TODO: add utilities class and put this function there
+# It is duplicated at the moment.
+def parse_output(text_response, model_name):
+    if model_name == "Llama-2-13B-GPTQ":
+        return text_response
+    elif model_name =="h2ogpt-oasst1-512-30B-GPTQ":
+        start_index = text_response.find("<bot>:")
+        response = text_response[start_index:]
+        return response
+    elif model_name == "WizardLM-30B-Uncensored-GPTQ" or model_name == "Nous-Hermes-13B-GPTQ":
+        start_index = text_response.find("### Response:")
+        response = text_response[start_index:]
+        return response
+    elif model_name == "guanaco-33B-GPTQ" or model_name == "Manticore-13B-GPTQ":
+        start_index = text_response.find("### Assistant:")
+        response = text_response[start_index:]
+        return response
+    elif model_name == "Metharme-13b-4bit-GPTQ":
+        start_index = text_response.find("<|model|>")
+        response = text_response[start_index:]
+        return response
+    else:
+        start_index = text_response.find("ASSISTANT:")
+        response = text_response[start_index:]
+        return response
+
+
 async def custom_llm_dependency(model_name: str = Header(None)):
     global default_model_name, default_llm_dependency
     if model_name is None:
@@ -53,17 +80,14 @@ async def ask_llm(
     Avilable models: [
         airoboros-13B-GPTQ,
         bluemoonrp-13b,
-        Metharme-13b-4bit-GPTQ,
         gpt4-x-vicuna-13B-GPTQ,
         GPT4All-13B-snoozy-GPTQ,
-        koala-13B-GPTQ-4bit-128g,
         Llama-2-13B-GPTQ,
         Manticore-13B-GPTQ,
+        Metharme-13b-4bit-GPTQ,
         Nous-Hermes-13B-GPTQ,
-        stable-vicuna-13B-GPTQ,
         guanaco-33B-GPTQ,
         h2ogpt-oasst1-512-30B-GPTQ,
-        tulu-30B-GPTQ,
         WizardLM-30B-Uncensored-GPTQ
     ]
     """
@@ -71,7 +95,6 @@ async def ask_llm(
     query = request.query
     logger.info(f"{default_model_name} User query: {query}")
     answer = llm_dependency.generate(query)
-    start_index = answer.find("ASSISTANT:") + len("ASSISTANT:")
-    response = answer[start_index:]
+    response = parse_output(answer, default_model_name)
 
     return {"answer": response}
