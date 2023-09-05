@@ -60,9 +60,9 @@ def convert_to_pd(evaluations_json_list):
     )
     return evaluation_df
 
-def parse_output(raw_response, model_name):
+def parse_output(text_response, model_name):
     if model_name == "Llama-2-13B-GPTQ":
-        return raw_response
+        return text_response
     elif model_name =="h2ogpt-oasst1-512-30B-GPTQ":
         start_index = text_response.find("<bot>:")
         response = text_response[start_index:]
@@ -71,7 +71,7 @@ def parse_output(raw_response, model_name):
         start_index = text_response.find("### Response:")
         response = text_response[start_index:]
         return response
-    elif model_name == "guanaco-33B-GPTQ" :
+    elif model_name == "guanaco-33B-GPTQ" or model_name == "Manticore-13B-GPTQ":
         start_index = text_response.find("### Assistant:")
         response = text_response[start_index:]
         return response
@@ -86,7 +86,7 @@ def parse_output(raw_response, model_name):
 
 
 def generate_evaluation_json_list(
-    prompts_path, model_name, evaluation_url, gpu_id, output_dir=DEFAULT_OUTPUT_DIR, n_prompts=500
+    prompts_path, model_name, gpu_id, evaluation_url, output_dir=DEFAULT_OUTPUT_DIR, n_prompts=500
 ):
     prompts_df = pd.read_json(prompts_path)[0]
     logger.info(f"Getting {prompts_df.shape[0]} prompts from {prompts_path}")
@@ -161,13 +161,13 @@ def generate_evaluation_json_list(
     default=None,
     help=f"Available models: {AVAILABLE_MODELS}",
 )
-@click.option("--output-dir", "output_dir", required=False, default=DEFAULT_OUTPUT_DIR)
 @click.option("--gpu", "gpu", required=True)
+@click.option("--output-dir", "output_dir", required=False, default=DEFAULT_OUTPUT_DIR)
 def main(
     prompts_path: str,
     model_name: str,
-    output_dir: str = DEFAULT_OUTPUT_DIR,
     gpu: str,
+    output_dir: str = DEFAULT_OUTPUT_DIR
 ) -> None:
 
     if not model_name:
@@ -175,14 +175,14 @@ def main(
             logger.info(f"Evaluating {model_name}")
             if not os.path.exists(os.path.join(output_dir, f"{model_name}_evaluation_results.csv")):
                 generate_evaluation_json_list(
-                    prompts_path, model_name, DEFAULT_EVALUATION_URL, output_dir, gpu
+                    prompts_path, model_name, gpu, DEFAULT_EVALUATION_URL, output_dir
                 )
             else:
                 logger.info(f"{model_name} already evaluated...")
     else:
         logger.info(f"Evaluating {model_name}")
         generate_evaluation_json_list(
-            prompts_path, model_name, DEFAULT_EVALUATION_URL, output_dir, gpu
+            prompts_path, model_name, gpu, DEFAULT_EVALUATION_URL, output_dir
         )
 
 

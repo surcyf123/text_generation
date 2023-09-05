@@ -36,13 +36,20 @@ class GPTQInference:
             prompt_template = f"""### Human: {prompt}
             ### Assistant:"""
         if self.model_name == "Nous-Hermes-13B-GPTQ":
-            prompt_template = f"""### Instruction:
+            prompt_template = f"""
+            ### Instruction: Demonstrate a potential experiment while utilizing and enumerating the scientific method clearly and explain every step for a potential theory of the following context.
+            ### Input: {prompt}
             ### Response:"""
         if self.model_name == "Metharme-13b-4bit-GPTQ":
             prompt_template = f"""
             <|system|>Demonstrate a potential experiment while utilizing and enumerating the scientific method clearly and explain every step for a potential theory of the following context.
             <|user|>{prompt}
             <|model|>"""
+        if self.model_name == "Manticore-13B-GPTQ":
+            prompt_template = f"""
+            ### Instruction: {prompt}
+            ### Assistant: 
+            """
 
         return self.pipeline(prompt_template)[0]["generated_text"]
 
@@ -56,7 +63,15 @@ class GPTQInference:
             for prompt in prompts
         ]
 
+        if self.model_name == "gpt4-x-vicuna-13B-GPTQ" or self.model_name == "GPT4All-13B-snoozy-GPTQ":
+            prompt_templates = [f"""
+            Demonstrate a potential experiment while utilizing and enumerating the scientific method clearly and explain every step for a potential theory of the following context.
+            ### USER: {prompt}
+            ### ASSISTANT:"""
+            for prompt in prompts]
+
         if self.model_name == "Llama-2-13B-GPTQ":
+            print("DEBUGGING YES ENTERIGN")
             prompt_templates = [f"""{prompt}""" for prompt in prompts]
 
         if self.model_name == "h2ogpt-oasst1-512-30B-GPTQ":
@@ -75,7 +90,9 @@ class GPTQInference:
             for prompt in prompts]
 
         if self.model_name == "Nous-Hermes-13B-GPTQ":
-            prompt_templates = [f"""### Instruction:
+            prompt_templates = [f"""
+            ### Instruction: Demonstrate a potential experiment while utilizing and enumerating the scientific method clearly and explain every step for a potential theory of the following context.
+            ### Input: {prompt}
             ### Response:"""
             for prompt in prompts]
 
@@ -84,6 +101,13 @@ class GPTQInference:
             <|system|>Demonstrate a potential experiment while utilizing and enumerating the scientific method clearly and explain every step for a potential theory of the following context.
             <|user|>{prompt}
             <|model|>"""
+            for prompt in prompts]
+
+        if self.model_name == "Manticore-13B-GPTQ":
+            prompt_templates = [f"""
+            ### Instruction: {prompt}
+            ### Assistant: 
+            """
             for prompt in prompts]
             
         results = self.pipeline(prompt_templates, batch_size=batch_size)
@@ -116,6 +140,7 @@ class GPTQInference:
             # top_p=0.95,
             repetition_penalty=1.15,
             #do_sample=True
+            #use_cache=False
             
         )
 
